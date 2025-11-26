@@ -13,7 +13,7 @@ def home():
 def simular():
     data = request.get_json(silent=True) or {}
 
-    #VALIDACIÓN MAGNITUD
+    # ===== VALIDACIÓN MAGNITUD =====
     try:
         magnitud = float(data.get("magnitude", 0))
     except (TypeError, ValueError):
@@ -24,7 +24,7 @@ def simular():
             "error": "La magnitud ingresada no es realista. Usa valores entre 1.0 y 10.0."
         }), 400
 
-    #VALIDACIÓN  DE PISO Y MOVIMIENTO
+    # ===== VALIDACIÓN PISO Y MOVIMIENTO =====
     piso = data.get("floor")
     movimiento = data.get("movement")
 
@@ -34,7 +34,7 @@ def simular():
     if movimiento not in ("oscilatorio", "trepidatorio", "mixto"):
         return jsonify({"error": "Movimiento inválido."}), 400
 
-    #CLASIFICACIÓN DE RIESGO POR MAGNITUD
+    # ===== CLASIFICACIÓN DE RIESGO POR MAGNITUD =====
     if 1.0 <= magnitud < 3.0:
         nivel = "muy bajo"
         color = "verde"
@@ -59,7 +59,7 @@ def simular():
 
     elif 4.0 <= magnitud < 6.0:
         nivel = "medio"
-        color = "amarillo"
+        color = "amarillo"   # riesgo medio -> amarillo
         intervalo = "4.0 – 5.9"
         mensajes = [
             "En Iztapalapa, un sismo de esta magnitud puede causar daños visibles. Permanece en zona segura dentro del inmueble y revisa después muros, techos y conexiones de gas.",
@@ -70,7 +70,7 @@ def simular():
 
     elif 6.0 <= magnitud < 7.0:
         nivel = "alto"
-        color = "rojo"
+        color = "naranja"     # alto -> naranja
         intervalo = "6.0 – 6.9"
         mensajes = [
             "En Iztapalapa, un sismo fuerte puede generar daños serios. Protégete en zona estructural y al terminar mantente lejos de fachadas, postes y cables sueltos.",
@@ -90,20 +90,21 @@ def simular():
             "El riesgo estructural es muy alto en Iztapalapa. Mantén protección interna y al terminar busca espacios abiertos sin regresar por objetos personales."
         ]
 
-    # ELECCIÓN DE UNA SOLA RECOMENDACIÓN
+    # ===== ELECCIÓN DE UNA SOLA RECOMENDACIÓN =====
     recomendacion = random.choice(mensajes)
 
-    #POSICIÓN DE LA FLECHA (0 a 1)
+    # ===== POSICIÓN NORMALIZADA PARA LA FLECHA (0 a 1) =====
+    # magnitud 1  -> 0.0   |   magnitud 10 -> 1.0
     y_pos = (magnitud - 1.0) / 9.0
 
-    #MAPA con COLOR
+    # ===== MAPA SEGÚN COLOR =====
     if color == "verde":
         mapa = "mapa_verde.png"
     elif color == "amarillo":
         mapa = "mapa_amarillo.png"
     elif color == "naranja":
         mapa = "mapa_naranja.png"
-    else:
+    else:  # rojo
         mapa = "mapa_rojo.png"
 
     return jsonify({
