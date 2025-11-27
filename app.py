@@ -93,29 +93,6 @@ def simular():
     # ===== ELECCIÓN DE UNA SOLA RECOMENDACIÓN =====
     recomendacion = random.choice(mensajes)
 
-    # ===== POSICIÓN NORMALIZADA PARA LA FLECHA (0 a 1) =====
-    # magnitud 1  -> 0.0   |   magnitud 10 -> 1.0
-    y_pos = (magnitud - 1.0) / 9.0
-
-    # ===== MAPA SEGÚN COLOR =====
-    if color == "verde":
-        mapa = "mapa_verde.png"
-    elif color == "amarillo":
-        mapa = "mapa_amarillo.png"
-    elif color == "naranja":
-        mapa = "mapa_naranja.png"
-    else:  # rojo
-        mapa = "mapa_rojo.png"
-
-    return jsonify({
-        "recomendacion": recomendacion,
-        "nivel": nivel,
-        "color": color,
-        "intervalo": intervalo,
-        "magnitud": magnitud,
-        "y_pos": round(y_pos, 3),
-        "mapa": mapa
-    })
 
 if __name__ == "__main__":
     app.run()
