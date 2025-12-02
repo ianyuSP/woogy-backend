@@ -34,53 +34,90 @@ def simular():
     if movimiento not in ("oscilatorio", "trepidatorio", "mixto"):
         return jsonify({"error": "Movimiento inválido."}), 400
 
-    # ===== CLASIFICACIÓN DE RIESGO =====
+    # ===== CLASIFICACIÓN DE RIESGO (MENSAJE BASE POR MAGNITUD) =====
     if 1.0 <= magnitud < 3.0:
         nivel = "muy bajo"
         mensajes = [
-            "En Iztapalapa, un sismo tan leve rara vez causa daños. Permanece en un punto estable dentro del inmueble.",
-            "Movimiento casi imperceptible. Mantén calma y revisa objetos altos por si se movieron ligeramente.",
-            "Aunque el riesgo es muy bajo, en zonas de suelo blando puede sentirse un poco más. Permanece en zona segura.",
-            "El movimiento es ligero pero perceptible. Mantente alejado de vidrios y objetos que puedan caer."
+            "En Iztapalapa, un sismo tan leve rara vez causa daños, pero el suelo blando puede amplificar ligeramente la sensación. Permanece en un punto estable dentro del inmueble.",
+            "El movimiento es casi imperceptible, aunque en zonas de suelo blando como Iztapalapa puede notarse un poco más. Mantén la calma y revisa objetos altos que pudieran haberse movido.",
+            "Aunque el riesgo es muy bajo, un sismo leve puede servir para identificar zonas seguras y rutas de salida en tu vivienda en Iztapalapa. Aprovecha para observar si hay muebles inestables.",
+            "El movimiento es ligero pero perceptible en algunos casos. Permanece en una zona segura y evita colocarte junto a vidrios u objetos que puedan caer en futuros sismos."
         ]
 
     elif 3.0 <= magnitud < 4.0:
         nivel = "bajo"
         mensajes = [
-            "Puede mover muebles ligeros y generar fisuras pequeñas. Ubícate en zona de seguridad dentro del inmueble.",
-            "Quédate lejos de ventanas y revisa estructuras ligeras al finalizar el sismo.",
-            "Aunque es un nivel bajo, el movimiento puede sentirse fuerte en suelos blandos. Permanece firme.",
-            "Puede causar caída de objetos mal fijados. Al terminar revisa repisas y techos ligeros."
+            "Un sismo de este rango puede mover muebles ligeros y generar fisuras pequeñas, especialmente en Iztapalapa por la amplificación del suelo. Ubícate en una zona de seguridad dentro del inmueble.",
+            "El movimiento puede sentirse moderado y causar caída de objetos mal fijados. Quédate lejos de ventanas y revisa después muros ligeros y repisas.",
+            "Aunque el nivel de riesgo sigue siendo bajo, en suelos blandos la sacudida puede ser notoria. Permanece firme en un punto seguro y verifica si hay desprendimientos menores.",
+            "Este tipo de sismo puede afectar acabados superficiales sin comprometer la estructura principal. Revisa techos ligeros, repisas y áreas con elementos inestables."
         ]
 
     elif 4.0 <= magnitud < 6.0:
         nivel = "medio"
         mensajes = [
-            "Este nivel puede generar daños visibles. Permanece en un punto seguro y revisa muros y techos después.",
-            "La sacudida puede amplificarse. Evita ventanas y objetos pesados durante el movimiento.",
-            "Puede afectar acabados y estructuras débiles. Quédate en zona segura sin evacuar hasta que termine.",
-            "Puede haber desprendimientos ligeros. Al finalizar revisa zonas elevadas y posibles grietas."
+            "Este tipo de sismo puede generar daños visibles en muros o acabados, sobre todo en construcciones vulnerables de Iztapalapa. Permanece en la zona de menor riesgo y revisa techos y muros al finalizar.",
+            "La sacudida puede amplificarse notablemente en suelos blandos, provocando caída de materiales ligeros. Evita ventanas y objetos pesados mientras permanezcas en el interior.",
+            "Puede afectar estructuras débiles y causar fisuras diagonales o desprendimientos. Mantente en un punto seguro sin evacuar hasta que el movimiento termine por completo.",
+            "En este rango pueden darse desprendimientos ligeros y daños en acabados. Al finalizar el sismo, inspecciona con precaución grietas nuevas o deformaciones inusuales."
         ]
 
     elif 6.0 <= magnitud < 7.0:
         nivel = "alto"
         mensajes = [
-            "Un sismo fuerte puede causar daños severos. Protégete en zona estructural y evita salir mientras tiembla.",
-            "Puede provocar colapsos parciales. Evacúa solo cuando termine, por rutas despejadas.",
-            "Estructuras debilitadas pueden fallar. No reingreses si notas grietas grandes o deformaciones.",
-            "El movimiento intenso puede dañar instalaciones. Evita techos sueltos y conexiones expuestas."
+            "Un sismo fuerte puede causar daños severos y caída de elementos estructurales en zonas como Iztapalapa. Protégete en un punto sólido del inmueble y evita evacuar mientras haya movimiento.",
+            "Este nivel puede provocar colapsos parciales en construcciones vulnerables. Permanece en un área segura sin acercarte a ventanas y evacúa solo cuando el movimiento haya terminado.",
+            "Estructuras debilitadas pueden fallar tras un sismo de esta magnitud. No reingreses a un inmueble si observas grietas grandes, desplomes o ruidos estructurales anormales.",
+            "El movimiento intenso puede dañar instalaciones eléctricas, de gas o techos sueltos. Al concluir el sismo, evita escaleras, áreas elevadas y zonas con conexiones expuestas."
         ]
 
     else:  # 7.0 – 10.0
         nivel = "crítico"
         mensajes = [
-            "Un sismo extremo puede causar colapsos. Protégete en zona sólida y evacúa al finalizar.",
-            "Riesgo severo de daños. Busca un punto firme durante el movimiento y después aléjate de estructuras.",
-            "Muchas estructuras pueden volverse inseguras. Evacúa cuando sea seguro, sin acercarte a muros altos.",
-            "Evita permanecer cerca de edificios tras el movimiento. Mantente en espacios abiertos."
+            "Un sismo extremo puede causar colapsos totales o severos, especialmente en suelos blandos. Protégete en la zona más resistente disponible y prepárate para evacuar en cuanto el movimiento termine.",
+            "En este nivel el riesgo estructural es muy alto y muchas construcciones pueden volverse inseguras. Mantente protegido durante el sismo y al salir aléjate de edificios, bardas y postes.",
+            "Un evento de esta magnitud puede dejar graves daños en infraestructura y servicios. Evacúa hacia espacios abiertos sin permanecer cerca de muros altos, fachadas o cables.",
+            "Tras un sismo extremo es posible que existan réplicas significativas y riesgos de nuevos colapsos. No regreses al inmueble y mantente atento a las indicaciones de Protección Civil."
         ]
 
-    recomendacion = random.choice(mensajes)
+    base = random.choice(mensajes)
+
+    # ===== COMPLEMENTO SEGÚN PISO =====
+    textos_piso = {
+        "baja": (
+            "Si te encuentras en planta baja, evita acercarte a ventanales, bardas exteriores u objetos que puedan caer, "
+            "y considera evacuar solo cuando el movimiento haya cesado y la ruta sea segura."
+        ),
+        "media": (
+            "En pisos intermedios, mantente alejado de escaleras, ventanas y balcones, y espera a que el sismo termine "
+            "antes de intentar evacuar siguiendo las rutas establecidas."
+        ),
+        "alta": (
+            "En pisos altos el movimiento suele amplificarse, por lo que es más seguro replegarte a la zona de menor riesgo "
+            "lejos de ventanas y muros divisorios, sin usar elevadores durante el sismo."
+        ),
+    }
+
+    # ===== COMPLEMENTO SEGÚN TIPO DE MOVIMIENTO =====
+    textos_movimiento = {
+        "oscilatorio": (
+            "El movimiento oscilatorio desplaza lateralmente muebles y personas, así que mantente lejos de libreros, repisas "
+            "y paredes largas que puedan fracturarse o desprender objetos."
+        ),
+        "trepidatorio": (
+            "El movimiento trepidatorio genera sacudidas verticales que pueden desprender plafones, lámparas y objetos suspendidos, "
+            "por lo que debes evitar permanecer debajo de ellos y proteger tu cabeza."
+        ),
+        "mixto": (
+            "Un movimiento mixto combina sacudidas laterales y verticales, de modo que es importante elegir un punto firme, "
+            "proteger cabeza y cuello y alejarte de cualquier objeto inestable."
+        ),
+    }
+
+    complemento_piso = textos_piso[piso]
+    complemento_mov = textos_movimiento[movimiento]
+
+    recomendacion = f"{base} {complemento_piso} {complemento_mov}"
 
     return jsonify({
         "recomendacion": recomendacion,
@@ -90,3 +127,4 @@ def simular():
 
 if __name__ == "__main__":
     app.run()
+
