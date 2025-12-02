@@ -34,87 +34,58 @@ def simular():
     if movimiento not in ("oscilatorio", "trepidatorio", "mixto"):
         return jsonify({"error": "Movimiento inválido."}), 400
 
-    # ===== CLASIFICACIÓN DE RIESGO POR MAGNITUD =====
+    # ===== CLASIFICACIÓN DE RIESGO =====
     if 1.0 <= magnitud < 3.0:
         nivel = "muy bajo"
-        color = "verde"
-        intervalo = "1.0 – 2.9"
         mensajes = [
-            "En Iztapalapa, un sismo tan leve rara vez causa daños. Únete a una zona estable dentro del inmueble y aprovecha para reconocer rutas de salida sin exponerte innecesariamente.",
-            "En este rango el movimiento es casi imperceptible, pero en Iztapalapa puede sentirse un poco más. Mantente en un área despejada y revisa que muebles altos sigan bien asegurados.",
-            "Aunque el riesgo es muy bajo, en Iztapalapa el suelo blando puede intensificar la sensación. Quédate en un punto firme del interior y verifica que no haya objetos sueltos.",
-            "El movimiento es ligero, pero en Iztapalapa puede amplificarse. Permanece dentro, evita zonas con vidrios y usa el momento para detectar áreas seguras del hogar."
+            "En Iztapalapa, un sismo tan leve rara vez causa daños. Permanece en un punto estable dentro del inmueble.",
+            "Movimiento casi imperceptible. Mantén calma y revisa objetos altos por si se movieron ligeramente.",
+            "Aunque el riesgo es muy bajo, en zonas de suelo blando puede sentirse un poco más. Permanece en zona segura.",
+            "El movimiento es ligero pero perceptible. Mantente alejado de vidrios y objetos que puedan caer."
         ]
 
     elif 3.0 <= magnitud < 4.0:
         nivel = "bajo"
-        color = "verde"
-        intervalo = "3.0 – 3.9"
         mensajes = [
-            "En Iztapalapa, un sismo así puede mover muebles y generar fisuras menores. Ubícate en zona segura dentro del inmueble y revisa después puertas y muros por cambios nuevos.",
-            "Este nivel puede sentirse fuerte en Iztapalapa. Quédate lejos de ventanas y objetos pesados y revisa al terminar si estructuras ligeras muestran desprendimientos.",
-            "Aunque el riesgo es bajo, en Iztapalapa la sacudida puede ser más notoria. Mantente en punto firme y observa si hay desniveles o grietas nuevas al finalizar.",
-            "Puede causar caída de objetos mal fijados en Iztapalapa. Mantente alejado de repisas y cristales y revisa al terminar techos y bardas por seguridad."
+            "Puede mover muebles ligeros y generar fisuras pequeñas. Ubícate en zona de seguridad dentro del inmueble.",
+            "Quédate lejos de ventanas y revisa estructuras ligeras al finalizar el sismo.",
+            "Aunque es un nivel bajo, el movimiento puede sentirse fuerte en suelos blandos. Permanece firme.",
+            "Puede causar caída de objetos mal fijados. Al terminar revisa repisas y techos ligeros."
         ]
 
     elif 4.0 <= magnitud < 6.0:
         nivel = "medio"
-        color = "amarillo"   # riesgo medio -> amarillo
-        intervalo = "4.0 – 5.9"
         mensajes = [
-            "En Iztapalapa, un sismo de esta magnitud puede causar daños visibles. Permanece en zona segura dentro del inmueble y revisa después muros, techos y conexiones de gas.",
-            "El suelo blando de Iztapalapa amplifica este tipo de sismo. Quédate alejado de ventanas y objetos pesados y verifica al terminar si hay grietas diagonales nuevas.",
-            "Puede afectar acabados y estructuras débiles en Iztapalapa. Mantente en área segura, evita evacuar mientras tiembla y revisa después instalaciones y bardas.",
-            "En Iztapalapa, estos sismos pueden provocar desprendimientos ligeros. Ubícate en punto firme, evita escaleras mientras dura y revisa al finalizar zonas elevadas."
+            "Este nivel puede generar daños visibles. Permanece en un punto seguro y revisa muros y techos después.",
+            "La sacudida puede amplificarse. Evita ventanas y objetos pesados durante el movimiento.",
+            "Puede afectar acabados y estructuras débiles. Quédate en zona segura sin evacuar hasta que termine.",
+            "Puede haber desprendimientos ligeros. Al finalizar revisa zonas elevadas y posibles grietas."
         ]
 
     elif 6.0 <= magnitud < 7.0:
         nivel = "alto"
-        color = "naranja"     # alto -> naranja
-        intervalo = "6.0 – 6.9"
         mensajes = [
-            "En Iztapalapa, un sismo fuerte puede generar daños serios. Protégete en zona estructural y al terminar mantente lejos de fachadas, postes y cables sueltos.",
-            "Este nivel puede provocar colapsos parciales en Iztapalapa. Quédate en área segura sin acercarte a ventanas y evacúa solo cuando termine por rutas despejadas.",
-            "En Iztapalapa, estructuras debilitadas pueden fallar. Protégete dentro del inmueble y al finalizar no reingreses si ves grietas grandes o deformaciones.",
-            "El movimiento intenso puede dañar instalaciones en Iztapalapa. Permanece en zona segura y al terminar evita escaleras, techos sueltos y conexiones expuestas."
+            "Un sismo fuerte puede causar daños severos. Protégete en zona estructural y evita salir mientras tiembla.",
+            "Puede provocar colapsos parciales. Evacúa solo cuando termine, por rutas despejadas.",
+            "Estructuras debilitadas pueden fallar. No reingreses si notas grietas grandes o deformaciones.",
+            "El movimiento intenso puede dañar instalaciones. Evita techos sueltos y conexiones expuestas."
         ]
 
     else:  # 7.0 – 10.0
         nivel = "crítico"
-        color = "rojo"
-        intervalo = "7.0 – 10.0"
         mensajes = [
-            "En Iztapalapa, un sismo extremo puede causar colapsos. Protégete en zona sólida y evacúa al terminar manteniéndote lejos de edificios, bardas y cables caídos.",
-            "Este nivel representa riesgo severo en Iztapalapa. Resguárdate en punto firme y al finalizar aléjate de construcciones y espera indicaciones oficiales.",
-            "En Iztapalapa, un sismo así puede volver inseguras muchas estructuras. Protégete dentro y evacúa cuando sea seguro, sin permanecer cerca de muros o postes.",
-            "El riesgo estructural es muy alto en Iztapalapa. Mantén protección interna y al terminar busca espacios abiertos sin regresar por objetos personales."
+            "Un sismo extremo puede causar colapsos. Protégete en zona sólida y evacúa al finalizar.",
+            "Riesgo severo de daños. Busca un punto firme durante el movimiento y después aléjate de estructuras.",
+            "Muchas estructuras pueden volverse inseguras. Evacúa cuando sea seguro, sin acercarte a muros altos.",
+            "Evita permanecer cerca de edificios tras el movimiento. Mantente en espacios abiertos."
         ]
 
-    # ===== ELECCIÓN DE UNA SOLA RECOMENDACIÓN =====
     recomendacion = random.choice(mensajes)
-
-    # ===== POSICIÓN NORMALIZADA PARA LA FLECHA (0 a 1) =====
-    # magnitud 1  -> 0.0   |   magnitud 10 -> 1.0
-    y_pos = (magnitud - 1.0) / 9.0
-
-    # ===== MAPA SEGÚN COLOR =====
-    if color == "verde":
-        mapa = "mapa_verde.png"
-    elif color == "amarillo":
-        mapa = "mapa_amarillo.png"
-    elif color == "naranja":
-        mapa = "mapa_naranja.png"
-    else:  # rojo
-        mapa = "mapa_rojo.png"
 
     return jsonify({
         "recomendacion": recomendacion,
         "nivel": nivel,
-        "color": color,
-        "intervalo": intervalo,
-        "magnitud": magnitud,
-        "y_pos": round(y_pos, 3),
-        "mapa": mapa
+        "magnitud": magnitud
     })
 
 if __name__ == "__main__":
